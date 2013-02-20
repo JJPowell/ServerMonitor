@@ -1,0 +1,41 @@
+README:
+
+User: 		jackson
+Password: 	jpassword
+Database: 	server_check_db
+Tables:		endpoints: 				eid*, 	ip, 		port
+			response_times: 		eid**, 	timestamp, 	latency
+
+
+
+* primary key
+** cascade updated/delete with eid from endpoints
+
+CREATE DATABASE IF NOT EXISTS server_check_db;
+use server_check_db;
+
+CREATE TABLE endpoints ( 
+eid SMALLINT UNSIGNED AUTO_INCREMENT NOT NULL, 
+ip VARCHAR(15) NOT NULL, 
+port SMALLINT UNSIGNED NOT NULL, 
+PRIMARY KEY ( eid ), 
+UNIQUE(ip, port));
+
+CREATE TABLE response_times ( 
+eid smallint unsigned NOT NULL, 
+timestamp bigint unsigned NOT NULL, 
+latency float, 
+index(eid) NOT NULL, 
+foreign key(eid) references endpoints(eid) on delete cascade on update cascade);
+
+CREATE TABLE response_timeout (
+eid smallint unsigned NOT NULL,
+timestamp bigint unsigned NOT NULL,
+index(eid) NOT NULL,
+foreign key(eid) references endpoints(eid) ondelete cascade on update cascade);
+
+1. take host, user, pass, connect to db, have get which returns connection (getConnection(), openConnection() and closeConnection()).
+
+
+
+create instance of endpointmanager inside of main, pass it as needed
