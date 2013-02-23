@@ -17,7 +17,7 @@ import java.util.ArrayList;
 public class Main {
 	
 	public static void main(String[] args) {		
-		final SQLConnector sqlConnector = new SQLConnector("jdbc:mysql://localhost:3306/", "username", "password");
+		final SQLConnector sqlConnector = new SQLConnector("jdbc:mysql://localhost:3306/", "jackson", "jpassword");
 		final EndpointManager endpointManager = new EndpointManager("/home/jackson/servers.txt", sqlConnector);
 		final ServerMonitor serverMonitor = new ServerMonitor(sqlConnector);
 		

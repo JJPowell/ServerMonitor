@@ -25,13 +25,14 @@ public class EndpointManager {
 			Endpoint endpoint;
 			/* reads each line of servers.txt and then converts them into Endpoint
 			 * objects to be inserted into the endpointManager. */
+			System.out.println("Endpoints:");//remove this if removing next println()
 			while((line = input.readLine()) != null){
 				line = line.trim();
 				if(line.isEmpty())
 					continue;
 				array = line.split(":");
 				endpoint = new Endpoint(array[0], Integer.parseInt(array[1]));
-				System.out.println(array[0] + " " + Integer.parseInt(array[1]));				
+				System.out.println(array[0] + " " + Integer.parseInt(array[1]));//remove this if removing previous println()				
 				insertEndpoint(endpoint);
 			}
 			input.close();
