@@ -63,22 +63,6 @@ public class EndpointManager {
 		}
 	} // end of insertEndpoint()
 	
-	void recordTimeout(final Endpoint endpoint){
-		try{
-			PreparedStatement ps = sqlConnector.getConnection().prepareStatement(
-					"INSERT INTO response_timeouts (eid, timestamp) " + 
-					"VALUES ((SELECT eid FROM endpoints WHERE ip= ? AND port= ?), " +
-					"UNIX_TIMESTAMP(NOW()));");
-			ps.setString(1, endpoint.getHost());
-			ps.setInt(2, endpoint.getPort());
-			ps.executeUpdate();
-			ps.close();
-		}
-		catch(SQLException e){
-			System.err.println(e.getMessage());
-		}
-	}
-	
 	public ArrayList<Endpoint> getEndpoints(){		
 		return endpoints;		
 	}

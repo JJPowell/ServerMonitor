@@ -20,6 +20,7 @@ public class Main {
 		final SQLConnector sqlConnector = new SQLConnector("jdbc:mysql://localhost:3306/", "jackson", "jpassword");
 		final EndpointManager endpointManager = new EndpointManager("/home/jackson/servers.txt", sqlConnector);
 		final ServerMonitor serverMonitor = new ServerMonitor(sqlConnector);
+		final ResponseTimeManager responseTimeManager = new ResponseTimeManager(sqlConnector);
 		
 		ArrayList<Endpoint> endpoints = endpointManager.getEndpoints();
 		while(true){
@@ -29,11 +30,11 @@ public class Main {
 				}
 				catch(UnknownHostException e){
 					System.err.println(endpoint.getHost() + ":" + String.valueOf(endpoint.getPort()) + " " + e.getMessage());
-					endpointManager.recordTimeout(endpoint);
+					responseTimeManager.recordTimeout(endpoint);
 				}
 				catch(IOException e){
 					System.err.println(endpoint.getHost() + ":" + String.valueOf(endpoint.getPort()) + " " + e.getMessage());
-					endpointManager.recordTimeout(endpoint);
+					responseTimeManager.recordTimeout(endpoint);
 				}
 			}
 			try {

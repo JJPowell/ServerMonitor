@@ -16,8 +16,8 @@ public class SQLConnector {
 		try {
 			connection = DriverManager.getConnection(host, user, pass);
 			statement = connection.createStatement();
-			statement.executeUpdate("CREATE DATABASE IF NOT EXISTS server_check_db;");
-			statement.execute("USE server_check_db");
+			statement.executeUpdate("CREATE DATABASE IF NOT EXISTS server_monitor_db;");
+			statement.execute("USE server_monitor_db");
 			statement.executeUpdate( "CREATE TABLE IF NOT EXISTS endpoints ("+
 									"eid SMALLINT UNSIGNED AUTO_INCREMENT NOT NULL, " + 
 									"ip VARCHAR(15) NOT NULL, " +
