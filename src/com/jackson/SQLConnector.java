@@ -6,12 +6,13 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
+import org.apache.log4j.Logger;
 
 public class SQLConnector {
-	
+	private static final Logger logger = Logger.getLogger(SQLConnector.class);
 	private Connection connection;
 	
-	public SQLConnector(String host, String user, String pass){		
+	public SQLConnector(String host, String user, String pass){
 		Statement statement;
 		try {
 			connection = DriverManager.getConnection(host, user, pass);
@@ -39,7 +40,7 @@ public class SQLConnector {
 			statement.close();			
 		} 
 		catch (SQLException e) {
-			System.err.println(e.getMessage());
+			logger.debug(",SQLException");
 			System.exit(1);
 		} // end try
 	} // end constructor SQLConnector()	
@@ -49,7 +50,7 @@ public class SQLConnector {
 			if(connection != null) connection.close();			
 		} 
 		catch (SQLException e) {
-			System.err.println(e.getMessage());
+			logger.debug(",SQLException");
 		}
 		finally {
 			connection = null;

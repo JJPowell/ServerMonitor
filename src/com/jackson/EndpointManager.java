@@ -6,10 +6,12 @@ import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import org.apache.log4j.Logger;
 
 public class EndpointManager {
 	private final SQLConnector sqlConnector;
 	private final ArrayList<Endpoint> endpoints;
+	private static final Logger logger = Logger.getLogger(EndpointManager.class);
 	
 	public EndpointManager(final String fileName, final SQLConnector sqlConnector){
 		this.sqlConnector = sqlConnector;
@@ -25,23 +27,22 @@ public class EndpointManager {
 			Endpoint endpoint;
 			/* reads each line of servers.txt and then converts them into Endpoint
 			 * objects to be inserted into the endpointManager. */
-			System.out.println("Endpoints:");//remove this if removing next println()
 			while((line = input.readLine()) != null){
 				line = line.trim();
-				if(line.isEmpty())
+				if(line.isEmpty()){
 					continue;
+				}
 				array = line.split(":");
-				endpoint = new Endpoint(array[0], Integer.parseInt(array[1]));
-				System.out.println(array[0] + " " + Integer.parseInt(array[1]));//remove this if removing previous println()				
+				endpoint = new Endpoint(array[0], Integer.parseInt(array[1]));			
 				insertEndpoint(endpoint);
 			}
 			input.close();
 		}
-		catch (FileNotFoundException f){
-			System.err.println(f);
+		catch (FileNotFoundException e){
+			logger.debug(",FileNotFoundException");
 		}
 		catch (IOException e){ 
-			System.err.println(e);
+			logger.debug(",IOException");
 		}
 	} // end of loadEndpoints()
 	
@@ -59,7 +60,7 @@ public class EndpointManager {
 			ps.close();
 		}
 		catch(SQLException e){
-			System.err.println(e.getMessage());
+			logger.debug(",SQLException");
 		}
 	} // end of insertEndpoint()
 	

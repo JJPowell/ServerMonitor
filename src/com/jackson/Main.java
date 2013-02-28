@@ -9,39 +9,32 @@
  * 3. Every line of servers.txt needs to be in the format "ip:port" e.g. 192.168.1.1:80 */
 
 package com.jackson;
-
-import java.io.IOException;
-import java.net.UnknownHostException;
 import java.util.ArrayList;
+import org.apache.log4j.Logger;
+import org.apache.log4j.PropertyConfigurator;
 
 public class Main {
+	private static final Logger logger = Logger.getLogger(Main.class);
+	private static final int SLEEP_IN_MILLISECONDS = 5000;
+	private static final String PROPERTY_CONFIGURATION_FILE = "/home/jackson/projects/ServerMonitor/log4j.properties";
 	
 	public static void main(String[] args) {		
 		final SQLConnector sqlConnector = new SQLConnector("jdbc:mysql://localhost:3306/", "jackson", "jpassword");
 		final EndpointManager endpointManager = new EndpointManager("/home/jackson/servers.txt", sqlConnector);
 		final ServerMonitor serverMonitor = new ServerMonitor(sqlConnector);
-		final ResponseTimeManager responseTimeManager = new ResponseTimeManager(sqlConnector);
 		
+		PropertyConfigurator.configure(PROPERTY_CONFIGURATION_FILE);
 		ArrayList<Endpoint> endpoints = endpointManager.getEndpoints();
+		System.out.println("Currently monitoring " + endpoints.size() + " ports.");
 		while(true){
 			for(Endpoint endpoint : endpoints){
-				try{
-					serverMonitor.checkEndpoint(endpoint);
-				}
-				catch(UnknownHostException e){
-					System.err.println(endpoint.getHost() + ":" + String.valueOf(endpoint.getPort()) + " " + e.getMessage());
-					responseTimeManager.recordTimeout(endpoint);
-				}
-				catch(IOException e){
-					System.err.println(endpoint.getHost() + ":" + String.valueOf(endpoint.getPort()) + " " + e.getMessage());
-					responseTimeManager.recordTimeout(endpoint);
-				}
-			}
+				serverMonitor.checkEndpoint(endpoint);
+			} // end for
 			try {
-				Thread.sleep(5000);
+				Thread.sleep(SLEEP_IN_MILLISECONDS);
 			} 
 			catch (InterruptedException e) {
-				// intentionally ignoring exception
+				logger.debug(",InterruptedException");
 			}
 		} // end of while(true)
 	} // end of main()
