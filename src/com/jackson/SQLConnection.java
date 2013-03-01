@@ -8,11 +8,11 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import org.apache.log4j.Logger;
 
-public class SQLConnector {
-	private static final Logger logger = Logger.getLogger(SQLConnector.class);
+public class SQLConnection {
+	private static final Logger logger = Logger.getLogger(SQLConnection.class);
 	private Connection connection;
 	
-	public SQLConnector(String host, String user, String pass){
+	public SQLConnection(String host, String user, String pass){
 		Statement statement;
 		try {
 			connection = DriverManager.getConnection(host, user, pass);

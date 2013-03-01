@@ -19,9 +19,9 @@ public class Main {
 	private static final String PROPERTY_CONFIGURATION_FILE = "/home/jackson/projects/ServerMonitor/log4j.properties";
 	
 	public static void main(String[] args) {		
-		final SQLConnector sqlConnector = new SQLConnector("jdbc:mysql://localhost:3306/", "jackson", "jpassword");
-		final EndpointManager endpointManager = new EndpointManager("/home/jackson/servers.txt", sqlConnector);
-		final ServerMonitor serverMonitor = new ServerMonitor(sqlConnector);
+		final SQLConnection sqlConnection = new SQLConnection("jdbc:mysql://localhost:3306/", "jackson", "jpassword");
+		final EndpointManager endpointManager = new EndpointManager("/home/jackson/servers.txt", sqlConnection);
+		final ServerMonitor serverMonitor = new ServerMonitor(sqlConnection);
 		
 		PropertyConfigurator.configure(PROPERTY_CONFIGURATION_FILE);
 		ArrayList<Endpoint> endpoints = endpointManager.getEndpoints();

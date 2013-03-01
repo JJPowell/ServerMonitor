@@ -6,17 +6,17 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import org.apache.log4j.Logger;
 
-public class ResponseTimeManager {
-	private static final Logger logger = Logger.getLogger(ResponseTimeManager.class);
-	private SQLConnector sqlConnector;	
+public class SQLResponseTimeWriter {
+	private static final Logger logger = Logger.getLogger(SQLResponseTimeWriter.class);
+	private SQLConnection sqlConnection;	
 	
-	public ResponseTimeManager(SQLConnector sqlConnector){
-		this.sqlConnector = sqlConnector;
+	public SQLResponseTimeWriter(SQLConnection sqlConnection){
+		this.sqlConnection = sqlConnection;
 	}
 	
 	public void insertResponseTime(String ip, int port, long timeStamp, float latency){
 		try{			
-			PreparedStatement ps = sqlConnector.getConnection().prepareStatement(
+			PreparedStatement ps = sqlConnection.getConnection().prepareStatement(
 					"INSERT INTO response_times (eid, timestamp, latency) " + 
 					"VALUES ((SELECT eid FROM endpoints WHERE ip=? AND port=?), " +
 					"UNIX_TIMESTAMP(NOW()), ?);");			
@@ -33,7 +33,7 @@ public class ResponseTimeManager {
 	
 	public void recordTimeout(final Endpoint endpoint){
 		try{
-			PreparedStatement ps = sqlConnector.getConnection().prepareStatement(
+			PreparedStatement ps = sqlConnection.getConnection().prepareStatement(
 					"INSERT INTO response_timeouts (eid, timestamp) " + 
 					"VALUES ((SELECT eid FROM endpoints WHERE ip= ? AND port= ?), " +
 					"UNIX_TIMESTAMP(NOW()));");

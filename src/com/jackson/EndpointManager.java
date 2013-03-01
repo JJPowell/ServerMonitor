@@ -9,12 +9,12 @@ import java.util.ArrayList;
 import org.apache.log4j.Logger;
 
 public class EndpointManager {
-	private final SQLConnector sqlConnector;
+	private final SQLConnection sqlConnection;
 	private final ArrayList<Endpoint> endpoints;
 	private static final Logger logger = Logger.getLogger(EndpointManager.class);
 	
-	public EndpointManager(final String fileName, final SQLConnector sqlConnector){
-		this.sqlConnector = sqlConnector;
+	public EndpointManager(final String fileName, final SQLConnection sqlConnection){
+		this.sqlConnection = sqlConnection;
 		this.endpoints =  new ArrayList<Endpoint>();
 		loadEndpoints(fileName);
 	}
@@ -50,7 +50,7 @@ public class EndpointManager {
 		endpoints.add(endpoint);//adds the endpoint into the endpoints ArrayList.
 		try{
 			//inserts the endpoint into the endpoints table only if it doesn't already exist.
-			PreparedStatement ps = sqlConnector.getConnection().prepareStatement("INSERT INTO endpoints (ip, port) VALUES (?, ?)" + 
+			PreparedStatement ps = sqlConnection.getConnection().prepareStatement("INSERT INTO endpoints (ip, port) VALUES (?, ?)" + 
 																				 "ON DUPLICATE KEY UPDATE ip = ?, port = ?");
 			ps.setString(1, endpoint.getHost());
 			ps.setInt(2, endpoint.getPort());
